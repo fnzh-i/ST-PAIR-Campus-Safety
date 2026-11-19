@@ -59,3 +59,20 @@ export function createZoneChange(zone, input, id = Date.now()) {
     }
   };
 }
+
+export function createDraftZone(existingZones) {
+  let number = 1;
+  while (existingZones.some(zone => zone.id === `NEW-ZONE-${number}`)) number++;
+  return { id:`NEW-ZONE-${number}`, building:'A · Academic', floor:'1', sensitivity:'Public', camera:'CAM-A4-H1', mapping:'Draft' };
+}
+
+export function createZoneRemoval(zone, id = Date.now()) {
+  return { id, name:`Remove zone: ${zone.id}`, detail:`Camera ${zone.camera} · requested now`, status:'Pending', removeZoneId:zone.id };
+}
+
+export function removeZoneById(existingZones, id) {
+  const index = existingZones.findIndex(zone => zone.id === id);
+  if (index < 0) return false;
+  existingZones.splice(index, 1);
+  return true;
+}

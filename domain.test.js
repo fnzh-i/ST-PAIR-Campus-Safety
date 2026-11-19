@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { ROLES, canAccess, nextStatus, studentAlertAllowed, validPolygon, createZoneChange } from './domain.js';
+import { ROLES, canAccess, nextStatus, studentAlertAllowed, validPolygon, createZoneChange, createDraftZone, createZoneRemoval, removeZoneById } from './domain.js';
 
 test('Security response follows the approved lifecycle and closed records cannot reopen', () => {
   assert.equal(nextStatus('New','acknowledge'),'Acknowledged');
@@ -40,4 +40,21 @@ test('submitting a zone edit preserves its existing sensitivity', () => {
   assert.equal(change.status, 'Pending');
   assert.equal(change.draft.values.sensitivity, 'Semi-restricted');
   assert.equal(change.detail.includes('Semi-restricted'), false);
+});
+
+test('adding a draft zone chooses an unused identifier', () => {
+  const draft = createDraftZone([{id:'NEW-ZONE-1'},{id:'NEW-ZONE-3'}]);
+  assert.equal(draft.id, 'NEW-ZONE-2');
+  assert.equal(draft.mapping, 'Draft');
+});
+
+test('active zone removal is represented as a pending request and removal updates the zone list', () => {
+  const zones = [{id:'A-4-Hallway-1',camera:'CAM-A4-H1'}, {id:'A-4-Classroom 401',camera:'CAM-A4-401'}];
+  const request = createZoneRemoval(zones[0], 9);
+  assert.equal(request.status, 'Pending');
+  assert.equal(request.removeZoneId, 'A-4-Hallway-1');
+  assert.equal(zones.length, 2);
+  assert.equal(removeZoneById(zones, request.removeZoneId), true);
+  assert.deepEqual(zones.map(z => z.id), ['A-4-Classroom 401']);
+  assert.equal(removeZoneById(zones, request.removeZoneId), false);
 });

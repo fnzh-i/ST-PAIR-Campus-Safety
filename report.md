@@ -51,3 +51,9 @@ Verification: read the new file back, confirmed it matches the source ignore fil
 Removed the sensitivity radio group from the zone editor and its unused styling. Zone submissions now preserve the selected zone's existing sensitivity instead of reading a removed form field. The campus zones table still displays the current value. Updated `src.js`, `domain.js`, `domain.test.js`, and `styles.css`; no other application source was changed.
 
 Verification: five tests passed, including a new case for preserving sensitivity; the production build passed. Browser readback showed the editor without the radio group and a pending request without an empty sensitivity value.
+
+## Follow-up · Zone add and removal controls
+
+Added a confirmation dialog before creating a draft zone and a Remove action to each campus zone row. Removing a draft takes effect after confirmation. Removing an active zone creates an Administrator approval request; the zone remains active until approval, and a rejected request leaves it in place. Approval removes the zone and clears its camera mapping. Updated `src.js`, `domain.js`, `domain.test.js`, and `styles.css`.
+
+Verification: seven tests and the production build passed. Browser checks covered add cancel/confirm, draft remove cancel/confirm, and active removal entering the approval queue while the zone remained listed.
