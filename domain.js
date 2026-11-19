@@ -40,3 +40,22 @@ export function validPolygon(points) {
   for (let i=0; i<points.length; i++) { const [x1,y1]=points[i], [x2,y2]=points[(i+1)%points.length]; area += x1*y2-x2*y1; }
   return Math.abs(area) > 20;
 }
+
+export function createZoneChange(zone, input, id = Date.now()) {
+  return {
+    id,
+    name: `${input.zoneId}: proposed zone configuration`,
+    detail: `Camera ${input.camera} · requested now`,
+    status: 'Pending',
+    draft: {
+      originalId: zone.id,
+      values: {
+        id: input.zoneId,
+        camera: input.camera,
+        building: input.building,
+        floor: input.floor,
+        sensitivity: zone.sensitivity
+      }
+    }
+  };
+}

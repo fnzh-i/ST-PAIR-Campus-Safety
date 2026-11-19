@@ -45,3 +45,9 @@ Verification cases: Cancel left each action incomplete; confirming placed the ru
 Added `.gitignore` to this repository using the reviewed ST-PAIR prototype rules. It excludes dependencies, build output, coverage, Vite cache, local environment files, logs, editor settings, and OS metadata while keeping `.env.example` trackable. No existing source or configuration file was changed for this update.
 
 Verification: read the new file back, confirmed it matches the source ignore file, and used `git check-ignore` to verify representative generated and local files are excluded. The existing `README.md` change and other untracked project files were left as found.
+
+## Follow-up · Zone editor sensitivity control
+
+Removed the sensitivity radio group from the zone editor and its unused styling. Zone submissions now preserve the selected zone's existing sensitivity instead of reading a removed form field. The campus zones table still displays the current value. Updated `src.js`, `domain.js`, `domain.test.js`, and `styles.css`; no other application source was changed.
+
+Verification: five tests passed, including a new case for preserving sensitivity; the production build passed. Browser readback showed the editor without the radio group and a pending request without an empty sensitivity value.

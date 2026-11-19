@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { ROLES, canAccess, nextStatus, studentAlertAllowed, validPolygon } from './domain.js';
+import { ROLES, canAccess, nextStatus, studentAlertAllowed, validPolygon, createZoneChange } from './domain.js';
 
 test('Security response follows the approved lifecycle and closed records cannot reopen', () => {
   assert.equal(nextStatus('New','acknowledge'),'Acknowledged');
@@ -32,4 +32,12 @@ test('zone geometry rejects empty, collapsed and out-of-frame polygons', () => {
   assert.equal(validPolygon([[10,10],[20,20],[30,30]]),false);
   assert.equal(validPolygon([[10,10],[20,10]]),false);
   assert.equal(validPolygon([[10,10],[120,10],[80,80]]),false);
+});
+
+test('submitting a zone edit preserves its existing sensitivity', () => {
+  const zone = { id:'A-4-Hallway-1', sensitivity:'Semi-restricted' };
+  const change = createZoneChange(zone, { zoneId:'A-4-Hallway-1', camera:'CAM-A4-401', building:'A · Academic', floor:'4' }, 7);
+  assert.equal(change.status, 'Pending');
+  assert.equal(change.draft.values.sensitivity, 'Semi-restricted');
+  assert.equal(change.detail.includes('Semi-restricted'), false);
 });
