@@ -57,3 +57,9 @@ Verification: five tests passed, including a new case for preserving sensitivity
 Added a confirmation dialog before creating a draft zone and a Remove action to each campus zone row. Removing a draft takes effect after confirmation. Removing an active zone creates an Administrator approval request; the zone remains active until approval, and a rejected request leaves it in place. Approval removes the zone and clears its camera mapping. Updated `src.js`, `domain.js`, `domain.test.js`, and `styles.css`.
 
 Verification: seven tests and the production build passed. Browser checks covered add cancel/confirm, draft remove cancel/confirm, and active removal entering the approval queue while the zone remained listed.
+
+## Follow-up · Action confirmation dialogs
+
+Added confirmation dialogs for Security acknowledgement and false-alarm disposition, Administrator approval and rejection, zone-change submission, and discarding zone edits. The existing resolution confirmation now uses the same dialog. Confirming Cancel edits restores the saved form values and default polygon; cancelling the dialog leaves edits in place. Updated `src.js`; no other application source was changed.
+
+Verification: browser checks exercised cancel and confirm for all six requested actions, plus the resolution dialog. Seven existing tests and the production build passed in the ST-PAIR project.
